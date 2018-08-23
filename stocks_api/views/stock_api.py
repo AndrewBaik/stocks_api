@@ -4,7 +4,7 @@ from pyramid.response import Response
 
 class Stock_api(APIViewSet):
     def list(self, request):
-        return Response(json={'message': 'All the list of your stock'}, status=200)
+        return Response(json={'message': 'get all'}, status=200)
 
     def retreive(self, request):
         return Response(json={'message': 'Here is a stock'}, status=200)
