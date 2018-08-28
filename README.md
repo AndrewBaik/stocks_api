@@ -19,7 +19,6 @@ Aug 27, 2018
 - [x] Created Portfolio, Stock, and Company View Controllers
 - [x] Successfully interact with 3rd party API
 
-
 Aug 23, 2018
 - [x] Deployed the web application to AWS EC2
 - [x] Added company and portfolio apis
