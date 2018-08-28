@@ -11,6 +11,8 @@ import json
 
 @view_config(route_name='lookup', renderer='json', request_method='GET')
 def lookup(request):
+    """ Looking up a json based on the third-party api
+    """
     url = 'https://api.iextrading.com/1.0/stock/{}/company/'.format(
         request.matchdict['symbol']
     )
@@ -19,7 +21,11 @@ def lookup(request):
 
 
 class PortfolioAPIView(APIViewSet):
+    """ CRUD class for portfolio
+    """
     def retrieve(self, request, id=None):
+        """ Getting a single portfolio
+        """
         if not id:
             return Response(json='ID not found', status=404)
 
@@ -33,6 +39,8 @@ class PortfolioAPIView(APIViewSet):
         return Response(json=data, status=200)
 
     def create(self, request):
+        """ Posting a new portfolio
+        """
         try:
             kwargs = json.loads(request.body)
         except json.JSONDecodeError as e:
@@ -52,10 +60,16 @@ class PortfolioAPIView(APIViewSet):
 
 
 class StockAPIView(APIViewSet):
+    """ CRUD class for Stock
+    """
     def list(self, request):
+        """ Get all stocks method
+        """
         return Response(json={'message': 'List of all your stock'}, status=200)
 
     def retrieve(self, request, id=None):
+        """ Get a single stock method
+        """
         if not id:
             return Response(json='ID not found', status=404)
 
@@ -69,6 +83,8 @@ class StockAPIView(APIViewSet):
         return Response(json=data, status=200)
 
     def create(self, request):
+        """ post a new stock
+        """
         try:
             kwargs = json.load(request.body)
         except json.JSONDecodeError as e:
@@ -87,6 +103,8 @@ class StockAPIView(APIViewSet):
         return Response(json=data, status=201)
 
     def destroy(self, request, id=None):
+        """ Remove a selected portfolio
+        """
         if not id:
             return Response(json='ID not found', status=404)
 
@@ -99,7 +117,11 @@ class StockAPIView(APIViewSet):
 
 
 class CompanyAPIView(APIViewSet):
+    """ CRUD class for Company
+    """
     def retrieve(self, request, symbol=None):
+        """ Get a selected Company
+        """
         return Response(json='you got one', status=200)
         # if not symbol:
         #     return Response(json='Company not found', status=404)

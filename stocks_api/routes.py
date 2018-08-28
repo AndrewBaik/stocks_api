@@ -5,6 +5,8 @@ from .views import StockAPIView, CompanyAPIView, PortfolioAPIView
 
 
 def includeme(config):
+    """ Defining route by url
+    """
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
     config.add_route('lookup', '/api/v1/lookup/{symbol}')
