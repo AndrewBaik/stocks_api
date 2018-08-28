@@ -29,7 +29,7 @@ class Portfolio(Base):
         portfolio = cls(**kwargs)
         request.dbsession.add(portfolio)
         return request.dbsession.query(cls).filter(
-            cls.id == kwargs['id']).one_or_none()
+            cls.name == kwargs['name']).one_or_none()
 
     @classmethod
     def one(cls, request=None, pk=None):

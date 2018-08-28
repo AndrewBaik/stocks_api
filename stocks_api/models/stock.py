@@ -36,7 +36,7 @@ class Stock(Base):
         stock = cls(**kwargs)
         request.dbsession.add(stock)
         return request.dbsession.query(cls).filter(
-            cls.id == kwargs['id']).one_or_none()
+            cls.symbol == kwargs['symbol']).one_or_none()
 
     @classmethod
     def one(cls, request=None, pk=None):
@@ -45,10 +45,10 @@ class Stock(Base):
         if request is None:
             raise DBAPIError
         return request.dbsession.query(cls).filter(
-            cls.id == pk)
+            cls.symbol == pk)
 
     @classmethod
-    def destroy(cls, request=None, pk=None):
+    def remove(cls, request=None, pk=None):
         """ Delete a selected row from Stock
         """
         if request is None:
