@@ -28,15 +28,15 @@ class Stock(Base):
     date_updated = Column(DateTime)
 
     @classmethod
-    def new(cls, request=None, **kwarg):
+    def new(cls, request=None, **kwargs):
         """ Create a new row in Stock
         """
         if request is None:
             raise DBAPIError
-        stock = cls(**kwarg)
+        stock = cls(**kwargs)
         request.dbsession.add(stock)
         return request.dbsession.query(cls).filter(
-            cls.id == kwarg['id']).one_or_none()
+            cls.id == kwargs['id']).one_or_none()
 
     @classmethod
     def one(cls, request=None, pk=None):

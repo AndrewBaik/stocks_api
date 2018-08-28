@@ -12,7 +12,7 @@ import json
 @view_config(route_name='lookup', renderer='json', request_method='GET')
 def lookup(request):
     url = 'https://api.iextrading.com/1.0/stock/{}/company/'.format(
-        request.matchdict['symbol'],
+        request.matchdict['symbol']
     )
     response = requests.get(url)
     return Response(json=response.json(), status=200)
@@ -34,15 +34,15 @@ class PortfolioAPIView(APIViewSet):
 
     def create(self, request):
         try:
-            kwarg = json.loads(request.body)
+            kwargs = json.loads(request.body)
         except json.JSONDecodeError as e:
             return Response(json=e.msg, status=400)
 
-        if 'id' not in kwarg:
+        if 'id' not in kwargs:
             return Response(json='Expected value: id', status=400)
 
         try:
-            portfolio = Portfolio.new(request, **kwarg)
+            portfolio = Portfolio.new(request, **kwargs)
         except IntegrityError:
             return Response(json='Duplicate Key Error, Zip code already exists', status=400)
 
@@ -50,21 +50,10 @@ class PortfolioAPIView(APIViewSet):
         data = schema.dump(portfolio).data
         return Response(json=data, status=201)
 
-    # def destroy(self, request, id=None):
-    #     if not id:
-    #         return Response(json='ID not found', status=404)
-
-    #     try:
-    #         Portfolio.remove(request=request, pk=id)
-    #     except (DataError, AttributeError):
-    #         return Response(json='Not Found', status=404)
-
-    #     return Response(status=204)
-
 
 class StockAPIView(APIViewSet):
-    # def list(self, request):
-    #     return Response(json={'message': 'List of all your stock'}, status=200)
+    def list(self, request):
+        return Response(json={'message': 'List of all your stock'}, status=200)
 
     def retrieve(self, request, id=None):
         if not id:
@@ -81,15 +70,15 @@ class StockAPIView(APIViewSet):
 
     def create(self, request):
         try:
-            kwarg = json.load(request.body)
+            kwargs = json.load(request.body)
         except json.JSONDecodeError as e:
             return Response(json=e.msg, status=400)
 
-        if 'id' not in kwarg:
+        if 'id' not in kwargs:
             return Response(json='Expected value: id', status=400)
 
         try:
-            stock = Stock(request, **kwarg)
+            stock = Stock.new(request, **kwargs)
         except IntegrityError:
             return Response(json='Duplicate Key Error, Zip code already exist', status=400)
 
@@ -110,14 +99,11 @@ class StockAPIView(APIViewSet):
 
 
 class CompanyAPIView(APIViewSet):
-    def retrieve(self, request, id=None):
+    def retrieve(self, request, symbol=None):
         return Response(json='you got one', status=200)
-    # @view_config(route_name='lookup', renderer='json', request_method='GET')
-    #     def (request):
-    #     if not id:
-    #         return Response(json='ID not found', status=404)
-    #     url = 'https://api.iextrading.com/1.0/stock/{}/company/'.format(
-    #         request.matchdict['symbol'],
-    #     )
-    #     response = requests.get(url)
-    #     return Response(json=response.json(), status=200)
+        # if not symbol:
+        #     return Response(json='Company not found', status=404)
+
+        # url = 'https://api.iextrading.com/1.0/stock/{symbol}/company/'
+        # response = requests.get(url)
+        # return Response(json=response.json(), status=200)

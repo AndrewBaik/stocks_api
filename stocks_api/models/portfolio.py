@@ -20,16 +20,16 @@ class Portfolio(Base):
     date_udpated = Column(DateTime, default=dt.now(), onupdate=dt.now())
 
     @classmethod
-    def new(cls, request=None, **kwarg):
+    def new(cls, request=None, **kwargs):
         """ Method for creating a new row in portfolio
         """
         if request is None:
             raise DBAPIError
 
-        portfolio = cls(**kwarg)
+        portfolio = cls(**kwargs)
         request.dbsession.add(portfolio)
         return request.dbsession.query(cls).filter(
-            cls.id == kwarg['id']).one_or_none()
+            cls.id == kwargs['id']).one_or_none()
 
     @classmethod
     def one(cls, request=None, pk=None):
