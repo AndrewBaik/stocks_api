@@ -9,17 +9,6 @@ import requests
 import json
 
 
-# @view_config(route_name='lookup', renderer='json', request_method='GET')
-# def lookup(request):
-#     """ Looking up a json based on the third-party api
-#     """
-#     url = 'https://api.iextrading.com/1.0/stock/{}/company/'.format(
-#         request.matchdict['symbol']
-#     )
-#     response = requests.get(url)
-#     return Response(json=response.json(), status=200)
-
-
 class PortfolioAPIView(APIViewSet):
     """ CRUD class for portfolio
     """
