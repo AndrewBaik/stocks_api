@@ -1,11 +1,13 @@
 from pyramid_restful.routers import ViewSetRouter
-from .views import StockAPIView, CompanyAPIView, PortfolioAPIView, AuthAPIView
+# from .views import StockAPIView, CompanyAPIView, PortfolioAPIView, AuthAPIView
+from .views.portfolio import StockAPIView, CompanyAPIView, PortfolioAPIView
+from .views.auth import AuthAPIView
 # from .views.company import Company_api
 # from .views.portfolio import Portfolio_api
 
 
 def includeme(config):
-    """ Defining route by url
+    """ routes to APIView by request
     """
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
@@ -14,4 +16,4 @@ def includeme(config):
     router.register('api/v1/stock', StockAPIView, 'stock')
     router.register('api/v1/company/{symbol}', CompanyAPIView, 'company')
     router.register('api/v1/portfolio', PortfolioAPIView, 'portfolio')
-    router.register('api/v1/auth', AuthAPIView, 'auth')
+    router.register('api/v1/auth/{auth}', AuthAPIView, 'auth')

@@ -10,6 +10,13 @@ This application utilizes [IEX TRADING](https://iextrading.com/developer/docs/) 
 
 
 # Change Log
+Aug 29, 2018
+- [x] Using the diagram below as a guide update your models/ directory with the new account.py, role.py, and associations.py files, and create each of the tables
+- [x] Ensure that your model relationships are functional
+- [x] Ensure that you’ve taken advantage of the SQLAlchemy relationship method to create additional functionality within your code base for accessing those new relationships
+- [x] Add your new models to the Initialization Script, drop and recreate your DB, and initialize again with your new tables
+
+
 Aug 27, 2018
 - [x] Created a Portfolio class with id, name, date_created, date_updated
 - [x] Defined two class methods on your Portfolio class: one() and new()

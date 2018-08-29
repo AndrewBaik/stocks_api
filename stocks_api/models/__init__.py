@@ -13,7 +13,7 @@ from .stock import Stock
 from .portfolio import Portfolio
 from .role import AccountRole
 from .account import Account
-from .association import Roles_Association
+from .association import roles_association
 
 # run configure_mappers after defining all of the models to ensure
 # all relationships can be setup
