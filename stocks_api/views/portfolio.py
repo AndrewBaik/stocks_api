@@ -5,6 +5,7 @@ from ..models.schemas import PortfolioSchema, StockSchema
 from ..models.portfolio import Portfolio
 from ..models.stock import Stock
 from sqlalchemy.exc import DataError, IntegrityError
+# from . import Account
 import requests
 import json
 
@@ -37,6 +38,10 @@ class PortfolioAPIView(APIViewSet):
 
         if 'name' not in kwargs:
             return Response(json='Expected value: name', status=400)
+
+        # if request.authenticated_userid:
+        #     account = Account.one(request, request.authenticated_userid)
+        #     kwargs['account_id'] = account.id
 
         try:
             portfolio = Portfolio.new(request, **kwargs)

@@ -4,9 +4,25 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pytest = "*"
-stocks-api = {editable = true, path = ".", extras = ["testing"]}
+cryptacular = "*"
+marshmallow-sqlalchemy = "*"
+plaster-pastedeploy = "*"
+"psycopg2-binary" = "*"
+pyramid = "*"
+pyramid-debugtoolbar = "*"
+"pyramid-jinja2" = "*"
+pyramid-jwt = "*"
 pyramid-restful-framework = "*"
+pyramid-retry = "*"
+pyramid-tm = "*"
+requests = "*"
+sqlalchemy = "*"
+transaction = "*"
+"zope.sqlalchemy" = "*"
+waitress = "*"
+pytest = "*"
+pytest-cov = "*"
+webtest = "*"
 
 [dev-packages]
 
