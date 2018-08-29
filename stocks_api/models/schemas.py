@@ -1,14 +1,14 @@
 from marshmallow_sqlalchemy import ModelSchema
 from marshmallow_sqlalchemy.fields import fields
-from . import Portfolio, Stock
-from .role import AccountRole
-from .association import roles_association
-from .account import Account
+from . import Portfolio, Stock, AccountRole, Account, roles_association
+# from .role import AccountRole
+# from .association import roles_association
+# from .account import Account
 
 
-class RoleAssociationSchema(ModelSchema):
-    class Meta:
-        model = roles_association
+# class RoleAssociationSchema(ModelSchema):
+#     class Meta:
+#         model = roles_association
 
 
 class AccountRoleSchema(ModelSchema):
@@ -36,7 +36,7 @@ class PortfolioSchema(ModelSchema):
 class StockSchema(ModelSchema):
     """ serializing stock using marshmallow sqlalchemy
     """
-    portfolio = fields.Nested(PortfolioSchema)
+    portfolio = fields.Nested(PortfolioSchema, many=True, only='name')
 
     class meta:
         model = Stock
