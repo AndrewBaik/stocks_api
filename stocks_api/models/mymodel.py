@@ -4,7 +4,6 @@ from sqlalchemy import (
     Integer,
     Text,
 )
-
 from .meta import Base
 
 

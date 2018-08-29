@@ -1,11 +1,14 @@
+from .stock import Stock
 from datetime import datetime as dt
 from sqlalchemy.exc import DBAPIError
+from sqlalchemy.orm import relationship
 from sqlalchemy import (
     Column,
     Index,
     Text,
     Integer,
-    DateTime
+    DateTime,
+    ForeignKey,
 )
 from .meta import Base
 
@@ -19,6 +22,10 @@ class Portfolio(Base):
     date_created = Column(DateTime, default=dt.now())
     date_udpated = Column(DateTime, default=dt.now(), onupdate=dt.now())
 
+    account_id = Column(Integer, ForeignKey('accounts.id'))
+    account = relationship('Account', back_populates='portfolio')
+    stock = relationship(Stock, back_populates='portfolio')
+
     @classmethod
     def new(cls, request=None, **kwargs):
         """ Method for creating a new row in portfolio
@@ -29,7 +36,7 @@ class Portfolio(Base):
         portfolio = cls(**kwargs)
         request.dbsession.add(portfolio)
         return request.dbsession.query(cls).filter(
-            cls.id == kwargs['id']).one_or_none()
+            cls.name == kwargs['name']).one_or_none()
 
     @classmethod
     def one(cls, request=None, pk=None):
