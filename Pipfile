@@ -23,6 +23,7 @@ waitress = "*"
 pytest = "*"
 pytest-cov = "*"
 webtest = "*"
+stocks-api = {editable = true, path = "."}
 
 [dev-packages]
 

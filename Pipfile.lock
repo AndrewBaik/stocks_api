@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4db384ec61bcb611bce910b2d156b6fb483acf9db74b8df160aecd775c655559"
+            "sha256": "f40fa9add10a1d7486bab9afe847d493222f26974dd216289c34097b98c7d49e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -354,6 +354,10 @@
             ],
             "index": "pypi",
             "version": "==1.2.11"
+        },
+        "stocks-api": {
+            "editable": true,
+            "path": "."
         },
         "transaction": {
             "hashes": [

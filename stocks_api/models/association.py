@@ -2,7 +2,8 @@ from sqlalchemy import Table, Column, Integer, ForeignKey
 # from sqlalchemy.orm import relationship
 from .meta import metadata
 
-
+""" connection for role(many) and account(many) replationship
+"""
 roles_association = Table(
     'roles_association',
     metadata,

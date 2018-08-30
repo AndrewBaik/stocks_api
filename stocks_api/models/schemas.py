@@ -12,11 +12,15 @@ from . import Portfolio, Stock, AccountRole, Account, roles_association
 
 
 class AccountRoleSchema(ModelSchema):
+    """ serializing Roles using marshmallow sqlalchemy
+    """
     class Meta:
         model = AccountRole
 
 
 class AccountSchema(ModelSchema):
+    """ serializing Account using marshmallow sqlalchemy
+    """
     role = fields.Nested(AccountRoleSchema, many=True, only='name')
 
     class Meta:

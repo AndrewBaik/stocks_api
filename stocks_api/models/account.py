@@ -19,9 +19,10 @@ manager = bcrypt.BCRYPTPasswordManager()
 
 
 class Account(Base):
+    """ Database table for user
+    """
     __tablename__ = 'accounts'
     id = Column(Integer, primary_key=True)
-    # username = Column(String(255), nullable=False, unique=True)
     email = Column(String(255), nullable=False, unique=True)
     password = Column(String(255), nullable=False)
     date_created = Column(DateTime, default=dt.now())
@@ -36,6 +37,8 @@ class Account(Base):
 
     @classmethod
     def new(cls, request, email=None, password=None):
+        """ create a new user
+        """
         if request.dbsession is None:
             raise DBAPIError
 
@@ -45,7 +48,7 @@ class Account(Base):
         # TODO: Assign roles to new user
 
         admin_role = request.dbsession.query(AccountRole).filter(
-            AccountRole.name == 'admin').one_or_none())
+            AccountRole.name == 'admin').one_or_none()
 
         user.roles.append(admin_role)
         request.dbsession.flush()
@@ -55,12 +58,16 @@ class Account(Base):
 
     @classmethod
     def one(cls, request, email=None):
+        """ retrieve a user
+        """
         return request.dbsession.query(cls).filter(
             cls.email == email).one_or_none()
 
 
     @classmethod
     def check_credentials(cls, request, email, password):
+        """ Validate a user
+        """
         if request.dbsession is None:
             raise DBAPIError
 
@@ -73,4 +80,3 @@ class Account(Base):
             if manager.check(account.password, password):
                 return account
         return None
-

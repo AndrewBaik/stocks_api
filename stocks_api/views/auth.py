@@ -7,6 +7,8 @@ import json
 
 class AuthAPIView(APIViewSet):
     def create(self, request, auth=None):
+        """ Register/Login and sends web token to client
+        """
         data = json.loads(request.body)
         if auth == 'register':
             try:
@@ -18,7 +20,6 @@ class AuthAPIView(APIViewSet):
             except (IntegrityError, KeyError):
                 return Response(json='Bad Request', status=400)
 
-            # TODO: Refactor this
             return Response(
                 json_body={
                     'token': request.create_jwt_token(
