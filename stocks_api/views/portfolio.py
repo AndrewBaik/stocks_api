@@ -5,6 +5,8 @@ from ..models.schemas import PortfolioSchema, StockSchema
 from ..models.portfolio import Portfolio
 from ..models.stock import Stock
 from sqlalchemy.exc import DataError, IntegrityError
+from json.decoder import JSONDecodeError
+# from . import Account
 import requests
 import json
 
@@ -39,6 +41,7 @@ class PortfolioAPIView(APIViewSet):
             return Response(json='Expected value: name', status=400)
 
         try:
+            kwargs['account_id'] = authen
             portfolio = Portfolio.new(request, **kwargs)
         except IntegrityError:
             return Response(json='Duplicate Key Error, portfolio exists', status=400)
@@ -51,47 +54,79 @@ class PortfolioAPIView(APIViewSet):
 class StockAPIView(APIViewSet):
     """ CRUD class for Stock
     """
-    def list(self, request):
+    def list(self, request, symbol=None):
         """ Get all stocks method
         """
-        return Response(json={'message': 'List of all your stock'}, status=200)
+        import pdb; pdb.set_trace()
+        if symbol is None:
+            records = Stock.all(request)
+            schema = StockSchema()
+            data = [schema.dump(record).data for record in records]
+            return Response(json=data, status=200)
+
+        try:
+            stock = Stock.one(request=request, pk=symbol)
+        except (DataError, AttributeError):
+            return Response(json='Not Found', status=404)
+        if not stock:
+            return Response(json='Not Found', status=404)
+
+        import pdb; pdb.set_trace()
+        schema = StockSchema()
+        data = schema.dump(stock).data
+        return Response(json=data, status=200)
 
     def retrieve(self, request, symbol=None):
         """ Get a single stock method
         """
         if not symbol:
             return Response(json='symbol not found', status=404)
-
         try:
             stock = Stock.one(request=request, pk=symbol)
         except (DataError, AttributeError):
             return Response(json='Not Found', status=404)
-
         schema = StockSchema()
         data = schema.dump(stock).data
         return Response(json=data, status=200)
 
-    def create(self, request):
+    def create(self, request, symbol=None):
         """ post a new stock
         """
-        try:
-            kwargs = json.loads(request.body)
-        except json.JSONDecodeError as e:
-            return Response(json=e.msg, status=400)
-
-        if 'symbol' not in kwargs:
-            return Response(json='Expected value: symbol', status=400)
+        if not symbol:
+            return Response(json='Company not found', status=404)
+        url = 'https://api.iextrading.com/1.0/stock/{}/company/'.format(symbol)
+        json = requests.get(url)
 
         try:
-            stock = Stock.new(request, **kwargs)
-        except IntegrityError:
-            return Response(json='Duplicate Key Error, Stock already exist', status=400)
+            kwarg = json.json()
+            del kwarg['tags']
+            stock = Stock.new(request, **kwarg)
+        except (IntegrityError, JSONDecodeError):
+            return Response(json='Company not found', status=400)
 
         schema = StockSchema()
         data = schema.dump(stock).data
         return Response(json=data, status=201)
 
-    def remove(self, request, id=None):
+
+        # try:
+        #     kwargs = json.loads(request.body)
+        # except json.JSONDecodeError as e:
+        #     return Response(json=e.msg, status=400)
+
+        # if 'symbol' not in kwargs:
+        #     return Response(json='Expected value: symbol', status=400)
+
+        # try:
+        #     stock = Stock.new(request, **kwargs)
+        # except IntegrityError:
+        #     return Response(json='Duplicate Key Error, Stock already exist', status=400)
+
+        # schema = StockSchema()
+        # data = schema.dump(stock).data
+        # return Response(json=data, status=201)
+
+    def remove(self, request, symbol=None):
         """ Remove a selected portfolio
         """
         if not id:
@@ -113,4 +148,5 @@ class CompanyAPIView(APIViewSet):
             return Response(json='Company not found', status=404)
         url = 'https://api.iextrading.com/1.0/stock/{}/company/'.format(symbol)
         response = requests.get(url)
+        import pdb; pdb.set_trace()
         return Response(json=response.json(), status=200)

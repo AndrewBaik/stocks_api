@@ -7,9 +7,10 @@ import json
 
 class AuthAPIView(APIViewSet):
     def create(self, request, auth=None):
+        """ Register/Login and sends web token to client
+        """
         data = json.loads(request.body)
         if auth == 'register':
-            import pdb; pdb.set_trace()
             try:
                 user = Account.new(
                     request,
@@ -19,8 +20,28 @@ class AuthAPIView(APIViewSet):
             except (IntegrityError, KeyError):
                 return Response(json='Bad Request', status=400)
 
-            return Response(json='Created', status=201)
+            return Response(
+                json_body={
+                    'token': request.create_jwt_token(
+                        user.email,
+                        roles=[role.name for role in user.roles],
+                        userName=user.email,
+                    )
+                }, status=201
+            )
 
         if auth == 'login':
-            pass
+            authenticated = Account.check_credentials(request, data['email'], data['password'])
+
+            if authenticated:
+                return Response(
+                    json_body={
+                        'token': request.create_jwt_token(
+                            authenticated.email,
+                            roles=[role.name for role in authenticated.roles],
+                            userName=authenticated.email,
+                        )
+                    }
+                )
+            return Response(json='Not Authorized', status=401)
         return Response(json='Not Found', status=404)

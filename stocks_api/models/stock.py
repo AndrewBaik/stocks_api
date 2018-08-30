@@ -33,6 +33,15 @@ class Stock(Base):
     portfolio = relationship('Portfolio', back_populates='stock')
 
     @classmethod
+    def all(cls, request):
+        """ return all of stock data
+        """
+        if request.dbsession is None:
+            raise DBAPIError
+
+        return request.dbsession.query(cls).all()
+
+    @classmethod
     def new(cls, request=None, **kwargs):
         """ Create a new row in Stock
         """
@@ -47,10 +56,11 @@ class Stock(Base):
     def one(cls, request=None, pk=None):
         """ Retrieve selected row from Stock
         """
+        # import pdb; pdb.set_trace()
         if request is None:
             raise DBAPIError
         return request.dbsession.query(cls).filter(
-            cls.symbol == pk)
+            cls.id == pk).one_or_none()
 
     @classmethod
     def remove(cls, request=None, pk=None):

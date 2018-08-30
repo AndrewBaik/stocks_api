@@ -48,4 +48,4 @@ def main(argv=sys.argv):
         roles = ['admin', 'view']
         for role in roles:
             model = AccountRole(name=role)
-        dbsession.add(model)
+            dbsession.add(model)

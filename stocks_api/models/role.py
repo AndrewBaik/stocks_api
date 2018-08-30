@@ -11,6 +11,8 @@ from sqlalchemy import (
 
 
 class AccountRole(Base):
+    """ database table for Roles
+    """
     __tablename__ = 'account_roles'
     id = Column(Integer, primary_key=True)
     name = Column(String(255), nullable=False, unique=True)

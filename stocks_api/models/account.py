@@ -1,8 +1,9 @@
+from .association import roles_association
+from cryptacular import bcrypt
+from datetime import datetime as dt
+from .meta import Base
 from .portfolio import Portfolio
 from .role import AccountRole
-from .association import roles_association
-from .meta import Base
-from datetime import datetime as dt
 from sqlalchemy.orm import relationship
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy import (
@@ -14,11 +15,14 @@ from sqlalchemy import (
     DateTime,
 )
 
+manager = bcrypt.BCRYPTPasswordManager()
+
 
 class Account(Base):
+    """ Database table for user
+    """
     __tablename__ = 'accounts'
     id = Column(Integer, primary_key=True)
-    # username = Column(String(255), nullable=False, unique=True)
     email = Column(String(255), nullable=False, unique=True)
     password = Column(String(255), nullable=False)
     date_created = Column(DateTime, default=dt.now())
@@ -29,19 +33,50 @@ class Account(Base):
 
     def __init__(self, email=None, password=None):
         self.email = email
-        self.password = password
+        self.password = manager.encode(password, 10)
 
     @classmethod
     def new(cls, request, email=None, password=None):
+        """ create a new user
+        """
         if request.dbsession is None:
             raise DBAPIError
 
         user = cls(email, password)
         request.dbsession.add(user)
 
+        # TODO: Assign roles to new user
+
+        admin_role = request.dbsession.query(AccountRole).filter(
+            AccountRole.name == 'admin').one_or_none()
+
+        user.roles.append(admin_role)
+        request.dbsession.flush()
+
         return request.dbsession.query(cls).filter(cls.email == email).one_or_none()
+
+
+    @classmethod
+    def one(cls, request, email=None):
+        """ retrieve a user
+        """
+        return request.dbsession.query(cls).filter(
+            cls.email == email).one_or_none()
+
 
     @classmethod
     def check_credentials(cls, request, email, password):
-        pass
+        """ Validate a user
+        """
+        if request.dbsession is None:
+            raise DBAPIError
 
+        try:
+            account = request.dbsession.query(cls).filter(cls.email == email).one_or_none()
+        except DBAPIError:
+            return None
+
+        if account is not None:
+            if manager.check(account.password, password):
+                return account
+        return None

@@ -10,11 +10,13 @@ This application utilizes [IEX TRADING](https://iextrading.com/developer/docs/) 
 
 
 # Change Log
+
 Aug 29, 2018
 - [x] Refactor Account model for bcrypt
 - [x] Create Check_credential for Account model
 - [x] Created auth.py handles register and login, providing web token per POST request
 - [x] Certain directory requires register/login, requiring web token.
+
 
 - [x] Using the diagram below as a guide update your models/ directory with the new account.py, role.py, and associations.py files, and create each of the tables
 - [x] Ensure that your model relationships are functional
@@ -30,6 +32,7 @@ Aug 27, 2018
 - [x] Created Schema serializer
 - [x] Created Portfolio, Stock, and Company View Controllers
 - [x] Successfully interact with 3rd party API
+
 
 Aug 23, 2018
 - [x] Deployed the web application to AWS EC2
