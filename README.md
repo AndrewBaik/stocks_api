@@ -11,6 +11,11 @@ This application utilizes [IEX TRADING](https://iextrading.com/developer/docs/) 
 
 # Change Log
 Aug 29, 2018
+- [x] Refactor Account model for bcrypt
+- [x] Create Check_credential for Account model
+- [x] Created auth.py handles register and login, providing web token per POST request
+- [x] Certain directory requires register/login, requiring web token.
+
 - [x] Using the diagram below as a guide update your models/ directory with the new account.py, role.py, and associations.py files, and create each of the tables
 - [x] Ensure that your model relationships are functional
 - [x] Ensure that you’ve taken advantage of the SQLAlchemy relationship method to create additional functionality within your code base for accessing those new relationships

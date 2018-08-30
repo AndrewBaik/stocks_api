@@ -11,8 +11,6 @@ This application utilizes [IEX TRADING](https://iextrading.com/developer/docs/) 
 
 # Change Log
 
-
-
 Aug 29, 2018
 - [x] Refactor Account model for bcrypt
 - [x] Create Check_credential for Account model
