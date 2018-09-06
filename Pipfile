@@ -24,6 +24,11 @@ pytest = "*"
 pytest-cov = "*"
 webtest = "*"
 stocks-api = {editable = true, path = "."}
+jupyter = "*"
+numpy = "*"
+pandas = "*"
+bokeh = "*"
+ipython = "*"
 
 [dev-packages]
 

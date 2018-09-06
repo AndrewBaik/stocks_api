@@ -54,26 +54,16 @@ class PortfolioAPIView(APIViewSet):
 class StockAPIView(APIViewSet):
     """ CRUD class for Stock
     """
-    def list(self, request, symbol=None):
+    def list(self, request):
         """ Get all stocks method
         """
-        import pdb; pdb.set_trace()
-        if symbol is None:
-            records = Stock.all(request)
-            schema = StockSchema()
-            data = [schema.dump(record).data for record in records]
-            return Response(json=data, status=200)
+        if request is None:
+            return Response(json='Not Found', status=400)
 
-        try:
-            stock = Stock.one(request=request, pk=symbol)
-        except (DataError, AttributeError):
-            return Response(json='Not Found', status=404)
-        if not stock:
-            return Response(json='Not Found', status=404)
-
-        import pdb; pdb.set_trace()
+        all_records = Stock.all(request)
+        user_records = [record for record in all_records if record.accounts.email == request.authenticated_userid]
         schema = StockSchema()
-        data = schema.dump(stock).data
+        data = [schema.dump(record).data for record in user_records]
         return Response(json=data, status=200)
 
     def retrieve(self, request, symbol=None):
@@ -85,9 +75,13 @@ class StockAPIView(APIViewSet):
             stock = Stock.one(request=request, pk=symbol)
         except (DataError, AttributeError):
             return Response(json='Not Found', status=404)
+        if not stock:
+            return Response(json='Not Found', status=404)
+
         schema = StockSchema()
         data = schema.dump(stock).data
         return Response(json=data, status=200)
+
 
     def create(self, request, symbol=None):
         """ post a new stock
@@ -148,5 +142,4 @@ class CompanyAPIView(APIViewSet):
             return Response(json='Company not found', status=404)
         url = 'https://api.iextrading.com/1.0/stock/{}/company/'.format(symbol)
         response = requests.get(url)
-        import pdb; pdb.set_trace()
         return Response(json=response.json(), status=200)

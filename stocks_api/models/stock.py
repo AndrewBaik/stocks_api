@@ -68,6 +68,7 @@ class Stock(Base):
         """
         if request is None:
             raise DBAPIError
+
         return request.dbsession.query(cls).filter(
-            cls.id == pk).delete()
+            cls.accounts.email == request.authenticated_userid).filter(cls.id == pk).delete()
 
