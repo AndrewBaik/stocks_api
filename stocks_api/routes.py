@@ -1,9 +1,7 @@
 from pyramid_restful.routers import ViewSetRouter
-# from .views import StockAPIView, CompanyAPIView, PortfolioAPIView, AuthAPIView
 from .views.portfolio import StockAPIView, CompanyAPIView, PortfolioAPIView
 from .views.auth import AuthAPIView
-# from .views.company import Company_api
-# from .views.portfolio import Portfolio_api
+from .views.visual import VisualAPIView
 
 
 def includeme(config):
@@ -14,6 +12,7 @@ def includeme(config):
     # config.add_route('lookup', '/api/v1/lookup/{symbol}')
     router = ViewSetRouter(config)
     router.register('api/v1/stock/{symbol}', StockAPIView, 'stock', permission='admin')
-    router.register('api/v1/company/{symbol}', CompanyAPIView, 'company', permission='view')
-    router.register('api/v1/portfolio', PortfolioAPIView, 'portfolio', permission='view')
+    router.register('api/v1/company/{symbol}', CompanyAPIView, 'company', permission='admin')
+    router.register('api/v1/portfolio', PortfolioAPIView, 'portfolio', permission='admin')
     router.register('api/v1/auth/{auth}', AuthAPIView, 'auth')
+    router.register('api/v1/visual/{symbol}', VisualAPIView, 'visual')
